@@ -10,17 +10,17 @@ class Server
 
   def initialize(services=[])
 
-    @services = services
+    @service_list = services
 
   end
 
-  def services()
-    @services 
+  def service_list()
+    @service_list
   end
 
   def status_list()
 
-    h = @services.map do |x|
+    h = @service_list.map do |x|
 
       file = x + '_control.rb'
       if File.exists? file
@@ -35,7 +35,7 @@ class Server
 
   def run(service)
 
-    return unless @services.include? service.to_s
+    return unless @service_list.include? service.to_s
     filename = service.to_s + '_control.rb'
     if File.exists? filename then
       `ruby #{filename} start`
@@ -50,7 +50,7 @@ class Server
 
   def status(service)
 
-    return unless @services.include? service.to_s
+    return unless @service_list.include? service.to_s
     filename = service.to_s + '_control.rb'
 
     if File.exists? filename then
@@ -63,7 +63,7 @@ class Server
 
   def stop(service)
 
-    return unless @services.include? service.to_s
+    return unless @service_list.include? service.to_s
     filename = service.to_s + '_control.rb'
 
     if File.exists? filename then
@@ -88,3 +88,30 @@ class GreenServerMgr
   end
 end
 
+class GreenClient
+
+  def initialize(host: '127.0.0.1', port: '57900')
+    @server = OneDrb::Client.new host: host, port: port
+  end
+
+  def service_list
+    @server.service_list
+  end
+
+  def status_list
+    @server.status_list
+  end
+
+  def start(service)
+    @server.start service
+  end
+
+  def stop(service)
+    @server.stop service
+  end
+
+  def status(service)
+    @server.status service
+  end
+
+end
