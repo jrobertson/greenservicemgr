@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 
 # file: greenservicemgr.rb
-# description: Intended for running within a Docker container to control daemonised GoGreen services.
+# description: Intended for running within a Docker container to control
+#                     daemonised GoGreen services.
 
 require 'onedrb'
 
@@ -33,6 +34,21 @@ class Server
     end.compact.to_h
   end
 
+  def restart(service)
+
+    return unless @service_list.include? service.to_s
+
+    filename = service.to_s + '_control.rb'
+
+    if File.exists? filename then
+      `ruby #{filename} restart`
+      'restarting service ' + service
+    else
+      'service not found'
+    end
+
+  end
+
   def run(service)
 
     return unless @service_list.include? service.to_s
@@ -52,6 +68,8 @@ class Server
 
     return unless @service_list.include? service.to_s
     filename = service.to_s + '_control.rb'
+
+    puts 'Dir.pwd:  ' + Dir.pwd.inspect
 
     if File.exists? filename then
       `ruby #{filename} status`
@@ -92,6 +110,10 @@ class GreenClient
 
   def initialize(host: '127.0.0.1', port: '57900')
     @server = OneDrb::Client.new host: host, port: port
+  end
+
+  def restart(service)
+    @server.restart service
   end
 
   def service_list

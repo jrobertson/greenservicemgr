@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'greenservicemgr'
-  s.version = '0.2.0'
+  s.version = '0.2.1'
   s.summary = 'Intended for running within a Docker container to control daemonised GoGreen services.'
   s.authors = ['James Robertson']
   s.files = Dir["lib/greenservicemgr.rb"]
