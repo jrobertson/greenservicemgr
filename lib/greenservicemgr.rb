@@ -1,8 +1,7 @@
 #!/usr/bin/env ruby
 
 # file: greenservicemgr.rb
-# description: Intended for running within a Docker container to control
-#                     daemonised GoGreen services.
+# description: Intended for running within a Docker container to control daemonised GoGreen services.
 
 require 'onedrb'
 
@@ -35,7 +34,7 @@ class Server
   end
 
   def restart(service)
-
+    return service.to_s
     return unless @service_list.include? service.to_s
 
     filename = service.to_s + '_control.rb'
@@ -48,6 +47,8 @@ class Server
     end
 
   end
+
+  alias restart2 restart
 
   def run(service)
 
@@ -113,7 +114,7 @@ class GreenClient
   end
 
   def restart(service)
-    @server.restart service
+    @server.restart2 service
   end
 
   def service_list
