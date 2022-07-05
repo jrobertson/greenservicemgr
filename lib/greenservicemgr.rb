@@ -34,7 +34,7 @@ class Server
   end
 
   def restart(service)
-    return service.to_s
+
     return unless @service_list.include? service.to_s
 
     filename = service.to_s + '_control.rb'
